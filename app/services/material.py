@@ -15,13 +15,13 @@ requested_count = 0
 
 
 def get_api_key(cfg_key: str):
+    global requested_count  # 必须放在函数最前面
     # 环境变量映射
     env_key_mapping = {
         "pexels_api_keys": "PEXELS_API_KEYS",
         "pixabay_api_keys": "PIXABAY_API_KEYS",
         "openai_api_key": "OPENAI_API_KEY"
     }
-    
     # 首先尝试从环境变量获取
     env_key = env_key_mapping.get(cfg_key)
     if env_key:
@@ -32,16 +32,12 @@ def get_api_key(cfg_key: str):
                 api_keys = [key.strip() for key in env_value.split(",")]
             else:
                 api_keys = [env_value.strip()]
-            
             # 如果只有一个密钥，直接返回
             if len(api_keys) == 1:
                 return api_keys[0]
-            
             # 如果有多个密钥，使用轮询方式
-            global requested_count
             requested_count += 1
             return api_keys[requested_count % len(api_keys)]
-    
     # 如果环境变量不存在，回退到配置文件
     api_keys = config.app.get(cfg_key)
     if not api_keys:
@@ -52,12 +48,9 @@ def get_api_key(cfg_key: str):
             f"2. In the config.toml file: {config.config_file}\n\n"
             f"{utils.to_json(config.app)}"
         )
-
     # if only one key is provided, return it
     if isinstance(api_keys, str):
         return api_keys
-
-    global requested_count
     requested_count += 1
     return api_keys[requested_count % len(api_keys)]
 
