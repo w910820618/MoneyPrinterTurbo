@@ -148,15 +148,30 @@
 git clone https://github.com/harry0703/MoneyPrinterTurbo.git
 ```
 
-#### ② 修改配置文件（可选，建议启动后也可以在 WebUI 里面配置）
+#### ② 配置API密钥
 
+有两种方式配置API密钥：
+
+**方式一：环境变量（推荐）**
+```bash
+# 复制环境变量示例文件
+cp env.example .env
+
+# 编辑.env文件，填入您的API密钥
+PEXELS_API_KEYS=your_pexels_api_key_here
+PIXABAY_API_KEYS=your_pixabay_api_key_here
+OPENAI_API_KEY=your_openai_api_key_here
+```
+
+**方式二：配置文件**
 - 将 `config.example.toml` 文件复制一份，命名为 `config.toml`
-- 按照 `config.toml` 文件中的说明，配置好 `pexels_api_keys` 和 `llm_provider`，并根据 llm_provider 对应的服务商，配置相关的
-  API Key
+- 按照 `config.toml` 文件中的说明，配置好 `pexels_api_keys` 和 `llm_provider`，并根据 llm_provider 对应的服务商，配置相关的API Key
+
+> 注意：环境变量的优先级高于配置文件。详细的环境变量配置说明请参考 [ENVIRONMENT_VARIABLES.md](./ENVIRONMENT_VARIABLES.md)
 
 ### Docker部署 🐳
 
-#### ① 启动Docker
+#### ① 安装Docker
 
 如果未安装 Docker，请先安装 https://www.docker.com/products/docker-desktop/
 
@@ -165,20 +180,63 @@ git clone https://github.com/harry0703/MoneyPrinterTurbo.git
 1. https://learn.microsoft.com/zh-cn/windows/wsl/install
 2. https://learn.microsoft.com/zh-cn/windows/wsl/tutorials/wsl-containers
 
-```shell
+#### ② 配置API密钥
+
+**方式一：使用.env文件（推荐）**
+```bash
+# 复制环境变量模板
+cp env.example .env
+
+# 编辑.env文件，添加您的API密钥
+nano .env
+```
+
+**方式二：使用自动化部署脚本**
+```bash
+# 运行部署脚本（会自动引导您配置API密钥）
+./docker-deploy.sh
+```
+
+#### ③ 启动服务
+
+**使用docker-compose：**
+```bash
 cd MoneyPrinterTurbo
-docker-compose up
+docker-compose up -d
+```
+
+**使用自动化脚本：**
+```bash
+./docker-deploy.sh deploy
 ```
 
 > 注意：最新版的docker安装时会自动以插件的形式安装docker compose，启动命令调整为docker compose up
 
-#### ② 访问Web界面
+#### ④ 访问服务
 
-打开浏览器，访问 http://0.0.0.0:8501
+- **Web界面**: http://localhost:8501
+- **API文档**: http://localhost:8080/docs 或 http://localhost:8080/redoc
 
-#### ③ 访问API文档
+#### ⑤ 管理服务
 
-打开浏览器，访问 http://0.0.0.0:8080/docs 或者 http://0.0.0.0:8080/redoc
+```bash
+# 查看服务状态
+./docker-deploy.sh status
+
+# 查看日志
+./docker-deploy.sh logs
+
+# 重启服务
+./docker-deploy.sh restart
+
+# 停止服务
+./docker-deploy.sh stop
+
+# 清理资源
+./docker-deploy.sh cleanup
+```
+
+> 详细说明请参考 [DOCKER_DEPLOYMENT.md](./DOCKER_DEPLOYMENT.md)
 
 ### 手动部署 📦
 

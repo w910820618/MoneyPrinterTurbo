@@ -5,6 +5,16 @@ import socket
 import toml
 from loguru import logger
 
+# 尝试加载.env文件
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+    logger.info("Loaded environment variables from .env file")
+except ImportError:
+    logger.info("python-dotenv not installed, skipping .env file loading")
+except Exception as e:
+    logger.warning(f"Failed to load .env file: {str(e)}")
+
 root_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 config_file = f"{root_dir}/config.toml"
 

@@ -12,6 +12,12 @@ services:
     command: [ "streamlit", "run", "./webui/Main.py","--browser.serverAddress=127.0.0.1","--server.enableCORS=True","--browser.gatherUsageStats=False" ]
     volumes: *common-volumes
     restart: always
+    env_file:
+      - .env
+    environment:
+      - PEXELS_API_KEYS=${PEXELS_API_KEYS}
+      - PIXABAY_API_KEYS=${PIXABAY_API_KEYS}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
   api:
     build:
       context: .
@@ -22,3 +28,9 @@ services:
     command: [ "python3", "main.py" ]
     volumes: *common-volumes
     restart: always
+    env_file:
+      - .env
+    environment:
+      - PEXELS_API_KEYS=${PEXELS_API_KEYS}
+      - PIXABAY_API_KEYS=${PIXABAY_API_KEYS}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}

@@ -148,15 +148,30 @@ One-click startup packages have not been created yet. See the **Installation & D
 git clone https://github.com/harry0703/MoneyPrinterTurbo.git
 ```
 
-#### ② Modify the Configuration File
+#### ② Configure API Keys
 
+There are two ways to configure API keys:
+
+**Method 1: Environment Variables (Recommended)**
+```bash
+# Copy the environment variables example file
+cp env.example .env
+
+# Edit the .env file and add your API keys
+PEXELS_API_KEYS=your_pexels_api_key_here
+PIXABAY_API_KEYS=your_pixabay_api_key_here
+OPENAI_API_KEY=your_openai_api_key_here
+```
+
+**Method 2: Configuration File**
 - Copy the `config.example.toml` file and rename it to `config.toml`
-- Follow the instructions in the `config.toml` file to configure `pexels_api_keys` and `llm_provider`, and according to
-  the llm_provider's service provider, set up the corresponding API Key
+- Follow the instructions in the `config.toml` file to configure `pexels_api_keys` and `llm_provider`, and according to the llm_provider's service provider, set up the corresponding API Key
+
+> Note: Environment variables take precedence over configuration file settings. For detailed environment variable configuration instructions, please refer to [ENVIRONMENT_VARIABLES.md](./ENVIRONMENT_VARIABLES.md)
 
 ### Docker Deployment 🐳
 
-#### ① Launch the Docker Container
+#### ① Install Docker
 
 If you haven't installed Docker, please install it first https://www.docker.com/products/docker-desktop/
 If you are using a Windows system, please refer to Microsoft's documentation:
@@ -164,20 +179,63 @@ If you are using a Windows system, please refer to Microsoft's documentation:
 1. https://learn.microsoft.com/en-us/windows/wsl/install
 2. https://learn.microsoft.com/en-us/windows/wsl/tutorials/wsl-containers
 
-```shell
-cd MoneyPrinterTurbo
-docker-compose up
+#### ② Configure API Keys
+
+**Method 1: Using .env file (Recommended)**
+```bash
+# Copy environment variables template
+cp env.example .env
+
+# Edit .env file with your API keys
+nano .env
 ```
 
-> Note：The latest version of docker will automatically install docker compose in the form of a plug-in, and the start command is adjusted to `docker compose up `
+**Method 2: Using automated deployment script**
+```bash
+# Run deployment script (will guide you through API key configuration)
+./docker-deploy.sh
+```
 
-#### ② Access the Web Interface
+#### ③ Start Services
 
-Open your browser and visit http://0.0.0.0:8501
+**Using docker-compose:**
+```bash
+cd MoneyPrinterTurbo
+docker-compose up -d
+```
 
-#### ③ Access the API Interface
+**Using automated script:**
+```bash
+./docker-deploy.sh deploy
+```
 
-Open your browser and visit http://0.0.0.0:8080/docs Or http://0.0.0.0:8080/redoc
+> Note：The latest version of docker will automatically install docker compose in the form of a plug-in, and the start command is adjusted to `docker compose up`
+
+#### ④ Access Services
+
+- **Web Interface**: http://localhost:8501
+- **API Documentation**: http://localhost:8080/docs or http://localhost:8080/redoc
+
+#### ⑤ Manage Services
+
+```bash
+# Check service status
+./docker-deploy.sh status
+
+# View logs
+./docker-deploy.sh logs
+
+# Restart services
+./docker-deploy.sh restart
+
+# Stop services
+./docker-deploy.sh stop
+
+# Clean up resources
+./docker-deploy.sh cleanup
+```
+
+> For detailed instructions, please refer to [DOCKER_DEPLOYMENT.md](./DOCKER_DEPLOYMENT.md)
 
 ### Manual Deployment 📦
 

@@ -13,6 +13,11 @@
 __pycache__
 logs/
 
+# Environment variables
+.env
+.env.local
+.env.*.local
+
 node_modules
 # VuePress 默认临时文件目录
 /sites/docs/.vuepress/.temp
